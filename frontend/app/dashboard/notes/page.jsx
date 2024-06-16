@@ -32,9 +32,7 @@ const NoteAdder = () => {
         setNotes(notes.filter((_, i) => i !== index));
     };
 
-    if (status === 'loading') {
-        return <p>Loading...</p>
-    }
+
     const handleSignin = (e) => {
         e.preventDefault()
         signIn()
