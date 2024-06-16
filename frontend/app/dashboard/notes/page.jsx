@@ -50,7 +50,6 @@ const NoteAdder = () => {
     //     )
     // }
 
-    const isLaptop = window.innerWidth >= 1024;
 
 
     return (
@@ -59,8 +58,7 @@ const NoteAdder = () => {
             <h1 className='mx-auto justify-center items-center flex text-2xl text-yellow-700 mt-10'>Notes !</h1>
             <div className="container mx-auto py-2 max-w-7xl">
             <div
-          className={`bg-gray-900 rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-400 border mx-auto ${
-            isLaptop ? "max-w-2xl" : "max-w-xs"
+          className={`bg-gray-900 rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-400 border mx-auto"
           } hover:border-yellow-700`}
         >
                     <div className="">
