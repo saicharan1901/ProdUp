@@ -40,7 +40,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+    <nav className="bg-gradient-to-br from-sky-800 to-sky-950">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
@@ -133,6 +133,7 @@ const Navbar = () => {
                     ? 'text-blue-700 dark:text-blue-500'
                     : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'
                 }`}
+                
               >
                 About
               </a>
@@ -148,6 +149,7 @@ const Navbar = () => {
                 }`}
               >
                 Contribute
+                
               </a>
             </li>
           </ul>

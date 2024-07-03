@@ -4,8 +4,8 @@ import Navbar from "../../components/navbar";
 
 export default function Home1(){
     return(
-        <div >
-            <HomeDiv /> 
+        <div> 
+          <HomeDiv/>  
         </div>
     );
 }
