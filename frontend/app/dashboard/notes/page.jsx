@@ -55,7 +55,7 @@ const NoteAdder = () => {
     return (
         <div className="bg-gray-900 text-white min-h-screen font-mono ">
             <Navbar />
-            <h1 className='mx-auto justify-center items-center flex text-2xl text-yellow-700 mt-10'>Notes !</h1>
+            <h1 className='mx-auto justify-center items-center flex text-2xl text-yellow-700 animate-bounce mt-10'>Notes</h1>
             <div className="container mx-auto py-2 max-w-7xl">
             <div
           className={`bg-gray-900 rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-400 border mx-auto"
