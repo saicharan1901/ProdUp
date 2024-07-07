@@ -1,10 +1,11 @@
 import React from "react";
-import Comp from "./component";
+import HomeDiv from "./components/HomeDiv";
+import Navbar from "../../components/navbar";
 
 export default function Home1(){
     return(
-        <div>
-            <Comp /> 
+        <div >
+            <HomeDiv /> 
         </div>
     );
 }
