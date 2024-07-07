@@ -67,6 +67,8 @@ const NoteAdder = () => {
       setTitle('');
       setContent('');
       toast.success('Note added successfully!');
+
+      window.location.reload();
     } catch (error) {
       toast.error('Failed to add note');
       console.error('Error adding note:', error);
