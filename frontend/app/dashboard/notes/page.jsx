@@ -37,7 +37,7 @@ const NoteAdder = () => {
       setNotes(result.notes || []);
     } catch (error) {
       console.error('Error fetching notes:', error);
-      toast.error('Failed to fetch notes');
+    //   toast.error('Failed to fetch notes');
     }
   };
 
