@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter from next/router
 import { signOutUser, onAuthStateChangedListener } from '@/app/firebase'; // Ensure path is correct
 
 const Navbar = () => {
@@ -9,6 +10,7 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const [user, setUser] = useState(null);
+  const router = useRouter(); // Initialize useRouter
 
   // Function to toggle the navbar dropdown
   const toggleNavbar = () => {
@@ -52,6 +54,7 @@ const Navbar = () => {
     try {
       await signOutUser();
       setUser(null);
+      router.push('/'); // Navigate back to home page
     } catch (error) {
       console.error('Sign out error:', error);
     }
@@ -126,6 +129,19 @@ const Navbar = () => {
                 Home
               </a>
             </li>
+            <li>
+              <a
+                href="/about"
+                onClick={() => handleLinkClick('About')}
+                className={`block py-2 px-3 rounded md:p-0 ${activeLink === 'About'
+                  ? 'text-blue-700 dark:text-blue-500'
+                  : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'
+                  }`}
+                aria-current={activeLink === 'About' ? 'page' : undefined}
+              >
+                About
+              </a>
+            </li>
             {user && (
               <>
                 <li>
@@ -138,18 +154,6 @@ const Navbar = () => {
                       }`}
                   >
                     Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/about"
-                    onClick={() => handleLinkClick('About')}
-                    className={`block py-2 px-3 rounded md:p-0 ${activeLink === 'About'
-                      ? 'text-blue-700 dark:text-blue-500'
-                      : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'
-                      }`}
-                  >
-                    About
                   </a>
                 </li>
                 <li>
