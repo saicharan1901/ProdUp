@@ -1,6 +1,7 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import Navbar from '../../../components/navbar';
 import { onAuthStateChangedListener } from '/app/firebase'; // Adjust path as necessary
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,6 +12,7 @@ const NoteAdder = () => {
   const [content, setContent] = useState('');
   const [notes, setNotes] = useState([]);
   const [user, setUser] = useState(null);
+  const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {
@@ -20,11 +22,12 @@ const NoteAdder = () => {
       } else {
         setUser(null);
         setNotes([]);
+        router.push('/'); // Redirect to home page if not authenticated
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const fetchNotes = async (uid) => {
     try {
@@ -68,7 +71,7 @@ const NoteAdder = () => {
       setContent('');
       toast.success('Note added successfully!');
 
-      window.location.reload();
+      window.location.reload(); // Optional: Reload the page to reflect the new note
     } catch (error) {
       toast.error('Failed to add note');
       console.error('Error adding note:', error);
@@ -93,6 +96,11 @@ const NoteAdder = () => {
       toast.error('Failed to delete note');
     }
   };
+
+  if (!user) {
+    // Optionally, render a loading state or placeholder while checking auth status
+    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="bg-gray-900 text-white min-h-screen font-mono">

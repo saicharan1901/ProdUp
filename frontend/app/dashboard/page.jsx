@@ -1,9 +1,33 @@
-import React from 'react';
-import Link from 'next/link';
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link'; // Ensure Link is imported from 'next/link'
 import Navbar from '../../components/navbar';
 import { FaStickyNote, FaBell, FaListUl } from 'react-icons/fa';
+import { onAuthStateChangedListener } from '@/app/firebase'; // Ensure path is correct
 
 const Dashboard = () => {
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        // Redirect to home page if user is not authenticated
+        router.push('/');
+      }
+    });
+    return () => unsubscribe(); // Clean up subscription on unmount
+  }, [router]);
+
+  if (!user) {
+    // Optionally, render a loading state or a placeholder while checking auth
+    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading...</div>;
+  }
+
   return (
     <>
       <Navbar />
