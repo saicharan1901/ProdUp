@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useSound from './hook';
 import Navbar from '../../../components/navbar';
+import { onAuthStateChangedListener } from '/app/firebase'; // Adjust path as necessary
 
 const Reminders = () => {
   const [reminders, setReminders] = useState([]);
@@ -14,6 +16,17 @@ const Reminders = () => {
   const [playSound, stopSound, SoundComponent] = useSound('/reminder.mp3');
   const reminderTimeoutRef = useRef(null);
   const currentToastId = useRef(null);
+  const router = useRouter(); // Initialize useRouter
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (!user) {
+        router.push('/'); // Redirect to home page if not authenticated
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -73,51 +86,53 @@ const Reminders = () => {
   };
 
   return (
-
-    <><Navbar /><div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center py-2">
-          <ToastContainer />
-          <h1 className="text-3xl text-white font-bold mb-6">Set a Reminder</h1>
-          <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-              <div className="mb-4">
-                  <label htmlFor="day" className="block text-sm font-medium text-gray-700">Day</label>
-                  <input
-                      id="day"
-                      type="date"
-                      value={day}
-                      onChange={(e) => setDay(e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-              </div>
-              <div className="mb-4">
-                  <label htmlFor="time" className="block text-sm font-medium text-gray-700">Time</label>
-                  <input
-                      id="time"
-                      type="time"
-                      value={time}
-                      onChange={(e) => setTime(e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-              </div>
-              <div className="mb-6">
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-                  <input
-                      id="message"
-                      type="text"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-              </div>
-              <div className="flex justify-end">
-                  <button
-                      onClick={handleAddReminder}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                      Add Reminder
-                  </button>
-              </div>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center py-2">
+        <ToastContainer />
+        <h1 className="text-3xl text-white font-bold mb-6">Set a Reminder</h1>
+        <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+          <div className="mb-4">
+            <label htmlFor="day" className="block text-sm font-medium text-gray-700">Day</label>
+            <input
+              id="day"
+              type="date"
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
           </div>
-          <div className="mt-6">
-              <SoundComponent />
+          <div className="mb-4">
+            <label htmlFor="time" className="block text-sm font-medium text-gray-700">Time</label>
+            <input
+              id="time"
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
           </div>
-      </div></>
+          <div className="mb-6">
+            <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+            <input
+              id="message"
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          </div>
+          <div className="flex justify-end">
+            <button
+              onClick={handleAddReminder}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Add Reminder
+            </button>
+          </div>
+        </div>
+        <div className="mt-6">
+          <SoundComponent />
+        </div>
+      </div>
+    </>
   );
 };
 
