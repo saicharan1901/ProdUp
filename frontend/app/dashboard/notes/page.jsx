@@ -6,12 +6,24 @@ import Navbar from '../../../components/navbar';
 import { onAuthStateChangedListener } from '/app/firebase'; // Adjust path as necessary
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 const NoteAdder = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [notes, setNotes] = useState([]);
   const [user, setUser] = useState(null);
+  const [editNoteId, setEditNoteId] = useState(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
@@ -97,10 +109,48 @@ const NoteAdder = () => {
     }
   };
 
+  const handleEdit = (note) => {
+    setEditNoteId(note.note_id);
+    setEditTitle(note.title);
+    setEditContent(note.content);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateNote = async () => {
+    if (!editTitle || !editContent) {
+      toast.error('Title and content are required');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://produpbackend.vercel.app/updatenote/${editNoteId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: editTitle, content: editContent }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to update note');
+      }
+
+      const updatedNote = { note_id: editNoteId, title: editTitle, content: editContent };
+      setNotes(notes.map((note) => (note.note_id === editNoteId ? updatedNote : note)));
+      setIsEditModalOpen(false);
+      toast.success('Note updated successfully!');
+    } catch (error) {
+      toast.error('Failed to update note');
+      console.error('Error updating note:', error);
+    }
+  };
+
   if (!user) {
     // Optionally, render a loading state or placeholder while checking auth status
-    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading...</div>;
-  }
+    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center"> <CircularProgress color="inherit" /></div>;
+  }   
+  
 
   return (
     <div className="bg-gray-900 text-white min-h-screen font-mono">
@@ -152,26 +202,70 @@ const NoteAdder = () => {
         >
             <h3 className="font-mono font-extrabold text-white">{note.title}</h3>
             <p className="text-gray-300">{note.content}</p>
-            <button
-                className="absolute top-0 right-0 p-1 text-white hover:text-yellow-600 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100"
-                onClick={() => handleDelete(note.note_id)}
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+            <div className="absolute top-10 right-10 flex p-o space-x-0 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out">
+                <IconButton aria-label="delete" size="large" sx={{ color: 'white' }} onClick={() => handleDelete(note.note_id)}>
+                    <DeleteIcon />
+                </IconButton>
+                <IconButton aria-label="edit" size="large" sx={{ color: 'white' }} onClick={() => handleEdit(note)}>
+                    <EditIcon />
+                </IconButton>
+            </div>
         </div>
     ))}
 </div>
 
       </div>
       <ToastContainer />
+      <Modal
+        open={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        aria-labelledby="edit-note-modal-title"
+        aria-describedby="edit-note-modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <h2 id="edit-note-modal-title">Edit Note</h2>
+          <TextField
+            id="edit-title"
+            label="Title"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+          />
+          <TextField
+            id="edit-content"
+            label="Content"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            multiline
+            rows={4}
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdateNote}
+            sx={{ mt: 2 }}
+          >
+            Save Changes
+          </Button>
+        </Box>
+      </Modal>
     </div>
   );
 };

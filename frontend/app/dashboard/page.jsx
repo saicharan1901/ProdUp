@@ -6,6 +6,7 @@ import Link from 'next/link'; // Ensure Link is imported from 'next/link'
 import Navbar from '../../components/navbar';
 import { FaStickyNote, FaBell, FaListUl } from 'react-icons/fa';
 import { onAuthStateChangedListener } from '@/app/firebase'; // Ensure path is correct
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -25,7 +26,7 @@ const Dashboard = () => {
 
   if (!user) {
     // Optionally, render a loading state or a placeholder while checking auth
-    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading...</div>;
+    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center"><CircularProgress color="inherit" /></div>;
   }
 
   return (

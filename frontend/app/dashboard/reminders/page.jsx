@@ -88,47 +88,49 @@ const Reminders = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center py-2">
+      <div
+        className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center py-2 bg-gray-900"
+      >
         <ToastContainer />
-        <h1 className="text-3xl text-white font-bold mb-6">Set a Reminder</h1>
-        <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-          <div className="mb-4">
-            <label htmlFor="day" className="block text-sm font-medium text-gray-700">Day</label>
+        <h1 className="text-5xl text-white font-extrabold mb-8 ">Set a Reminder</h1>
+        <div className="bg-gray-800 shadow-xl rounded-lg p-8 w-full max-w-sm animate__animated animate__zoomIn transition-transform transform hover:scale-105">
+          <div className="mb-6">
+            <label htmlFor="day" className="block text-lg font-medium text-white">Day</label>
             <input
               id="day"
               type="date"
               value={day}
               onChange={(e) => setDay(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+              className="mt-1 block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-lg transition duration-150 ease-in-out transform hover:scale-105 bg-white text-gray-800" />
           </div>
-          <div className="mb-4">
-            <label htmlFor="time" className="block text-sm font-medium text-gray-700">Time</label>
+          <div className="mb-6">
+            <label htmlFor="time" className="block text-lg font-medium text-white">Time</label>
             <input
               id="time"
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+              className="mt-1 block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-lg transition duration-150 ease-in-out transform hover:scale-105 bg-white text-gray-800" />
           </div>
-          <div className="mb-6">
-            <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+          <div className="mb-8">
+            <label htmlFor="message" className="block text-lg font-medium text-white">Message</label>
             <input
               id="message"
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+              className="mt-1 block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-lg transition duration-150 ease-in-out transform hover:scale-105 bg-white text-gray-800" />
           </div>
           <div className="flex justify-end">
             <button
               onClick={handleAddReminder}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center px-5 py-3 border border-transparent text-lg font-medium rounded-lg shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out transform hover:scale-105"
             >
               Add Reminder
             </button>
           </div>
         </div>
-        <div className="mt-6">
+        <div className="mt-8 animate__animated animate__fadeInUp">
           <SoundComponent />
         </div>
       </div>

@@ -61,47 +61,50 @@ const Todo = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center py-2">
+      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center py-4">
         <ToastContainer />
-        <h1 className="text-3xl font-bold text-white mb-6">Todo List</h1>
-        <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+        <h1 className="text-4xl font-bold text-white mb-8">Todo List</h1>
+        <div className="bg-gradient-to-br from-yellow-500 to-red-500 shadow-lg rounded-lg p-6 w-full max-w-md animate__animated animate__fadeIn transition duration-500">
           <div className="mb-4">
-            <label htmlFor="todo" className="block text-sm font-medium text-gray-700">Todo</label>
+            <label htmlFor="todo" className="block text-sm font-medium text-white mb-2">Todo</label>
             <input
               id="todo"
               type="text"
               value={todoText}
               onChange={(e) => setTodoText(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Enter todo..." />
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-100 text-gray-800 placeholder-gray-500"
+              placeholder="Enter todo..."
+            />
           </div>
           <div className="mb-4">
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
+            <label htmlFor="tags" className="block text-sm font-medium text-white mb-2">Tags (comma-separated)</label>
             <input
               id="tags"
               type="text"
               value={tagText}
               onChange={(e) => setTagText(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Enter tags..." />
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-100 text-gray-800 placeholder-gray-500"
+              placeholder="Enter tags..."
+            />
           </div>
-          <div className="mb-6">
-            <button
-              onClick={handleAddTodo}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Add Todo
-            </button>
-          </div>
+          <button
+            onClick={handleAddTodo}
+            className="w-full py-2 text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Add Todo
+          </button>
+        </div>
+        <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-md mt-8 animate__animated animate__fadeInUp">
           {todos.map(todo => (
-            <div key={todo.id} className="flex items-center justify-between bg-gray-200 px-4 py-2 mb-2 rounded-md">
+            <div key={todo.id} className="flex items-center justify-between bg-gray-200 px-4 py-2 mb-2 rounded-md shadow-sm">
               <div className="flex items-center">
                 <input
                   type="checkbox"
                   checked={todo.done}
                   onChange={() => handleToggleDone(todo.id)}
-                  className="form-checkbox h-5 w-5 text-blue-500" />
-                <p className={`ml-2 ${todo.done ? 'line-through' : ''}`}>{todo.text}</p>
+                  className="form-checkbox h-5 w-5 text-blue-500 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                />
+                <p className={`ml-2 text-lg ${todo.done ? 'line-through' : ''}`}>{todo.text}</p>
               </div>
               <div>
                 {todo.tags.map((tag, index) => (
