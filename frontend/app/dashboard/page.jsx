@@ -43,10 +43,6 @@ const Dashboard = () => {
               <div className="relative group cursor-pointer bg-gradient-to-r from-teal-500 to-purple-600 rounded-xl shadow-lg p-8 transition-transform transform hover:scale-105 hover:shadow-2xl">
                 <FaStickyNote className="text-4xl mx-auto mb-4" />
                 <h3 className="text-2xl font-semibold text-center mb-4">Notes</h3>
-                {/* Message Bubble */}
-                <div className="absolute left-1/2 top-full mt-2 w-64 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white p-2 rounded-lg shadow-lg">
-                  Take down and save notes to keep track of your thoughts and ideas.
-                </div>
               </div>
             </Link>
             {/* Reminders Card */}
@@ -54,10 +50,6 @@ const Dashboard = () => {
               <div className="relative group cursor-pointer bg-gradient-to-r from-teal-500 to-purple-600 rounded-xl shadow-lg p-8 transition-transform transform hover:scale-105 hover:shadow-2xl">
                 <FaBell className="text-4xl mx-auto mb-4" />
                 <h3 className="text-2xl font-semibold text-center mb-4">Reminders</h3>
-                {/* Message Bubble */}
-                <div className="absolute left-1/2 top-full mt-2 w-64 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white p-2 rounded-lg shadow-lg">
-                  Set reminders for your tasks to ensure you never miss a deadline.
-                </div>
               </div>
             </Link>
             {/* Todo List Card */}
