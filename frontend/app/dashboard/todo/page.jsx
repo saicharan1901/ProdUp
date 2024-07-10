@@ -63,26 +63,26 @@ const Todo = () => {
       <Navbar />
       <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center py-2">
         <ToastContainer />
-        <h1 className="text-3xl font-bold text-white mb-6">Todo List</h1>
-        <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+        <h1 className="mx-auto justify-center items-center flex text-4xl font-bold text-yellow-700 mt-10">Todo List</h1>
+        <div className="mt-6 bg-gray-800 rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-600 border mx-auto hover:border-yellow-700 transition duration-300 transform hover:-translate-y-1 hover:shadow-2xl">
           <div className="mb-4">
-            <label htmlFor="todo" className="block text-sm font-medium text-gray-700">Todo</label>
+            <label htmlFor="todo" className="block text-sm font-medium text-white font-bold">Todo</label>
             <input
               id="todo"
               type="text"
               value={todoText}
               onChange={(e) => setTodoText(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="w-full px-3 py-2 placeholder-gray-400 rounded-lg focus:outline-none bg-gray-700 text-white transition duration-300 transform focus:ring-2 focus:ring-yellow-700"
               placeholder="Enter todo..." />
           </div>
           <div className="mb-4">
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
+            <label htmlFor="tags" className="block text-sm font-medium text-white font-bold">Tags (comma-separated)</label>
             <input
               id="tags"
               type="text"
               value={tagText}
               onChange={(e) => setTagText(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="w-full px-3 py-2 placeholder-gray-400 rounded-lg focus:outline-none bg-gray-700 text-white transition duration-300 transform focus:ring-2 focus:ring-yellow-700"
               placeholder="Enter tags..." />
           </div>
           <div className="mb-6">

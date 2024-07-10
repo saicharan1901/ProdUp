@@ -1,11 +1,10 @@
 import React from "react";
 import Navbar from "../../components/navbar";
 
-// Sample data for developers
 const developers = [
     {
         name: "Sai Charan",
-        photo: "/charan.jpg", // Ensure you have the photo in the public/images directory
+        photo: "/charan.jpg",
     },
     {
         name: "Yashwanth Reddy",

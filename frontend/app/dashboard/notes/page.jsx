@@ -143,33 +143,31 @@ const NoteAdder = () => {
           </button>
         </div>
 
-        
-<div className="flex flex-wrap mx-auto ml-7 justify-center">
-    {notes.map((note) => (
-        <div
-            key={note.note_id}
-            className="bg-gray-900 rounded-lg shadow-lg px-8 py-6 mb-8 mr-8 max-w-md group relative break-words hover:border-yellow-700 border w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-grow"
-        >
-            <h3 className="font-mono font-extrabold text-white">{note.title}</h3>
-            <p className="text-gray-300">{note.content}</p>
-            <button
-                className="absolute top-0 right-0 p-1 text-white hover:text-yellow-600 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100"
-                onClick={() => handleDelete(note.note_id)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {notes.map((note) => (
+            <div
+              key={note.note_id}
+              className="bg-gradient-to-r from-yellow-700 to-yellow-500 rounded-lg shadow-lg px-8 py-6 mb-8 hover:border-yellow-900 border border-gray-700 group relative transition duration-300 transform hover:scale-105"
             >
+              <h3 className="font-mono font-extrabold text-gray-900">{note.title}</h3>
+              <p className="text-gray-800">{note.content}</p>
+              <button
+                className="absolute top-0 right-0 p-1 text-gray-900 hover:text-gray-700 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100"
+                onClick={() => handleDelete(note.note_id)}
+              >
                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-            </button>
+              </button>
+            </div>
+          ))}
         </div>
-    ))}
-</div>
-
       </div>
       <ToastContainer />
     </div>
