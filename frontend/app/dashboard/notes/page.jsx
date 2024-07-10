@@ -110,7 +110,7 @@ const NoteAdder = () => {
         <div className="bg-gray-900 text-white min-h-screen font-mono">
             <Navbar />
             <h1 className='mx-auto justify-center items-center flex text-4xl font-bold text-yellow-700 mt-10 animate-bounce'>Notes!</h1>
-            <div className="container mx-auto py-8 max-w-7xl">
+            <div className="container mx-auto py-8 w-2/3 lg:w-1/2">
                 <div className="bg-gray-800 rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-600 border mx-auto hover:border-yellow-700 transition duration-300 transform hover:scale-105 hover:shadow-2xl">
                     <div className="mb-4">
                         <input
@@ -147,7 +147,12 @@ const NoteAdder = () => {
                     </button>
                 </div>
 
-                <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 mx-auto">
+
+
+
+            </div>
+
+            <div className="columns-1 sm:columns-1 md:columns-2 lg:columns-3 lg:max-w-7xl max-w-xl gap-6 mx-auto">
                     {notes.map((note) => (
                         <div
                             key={note.note_id}
@@ -174,9 +179,6 @@ const NoteAdder = () => {
                         </div>
                     ))}
                 </div>
-
-
-            </div>
             <ToastContainer />
         </div>
     );
