@@ -6,57 +6,10 @@ import Navbar from '../../../components/navbar';
 import { onAuthStateChangedListener } from '/app/firebase'; // Adjust path as necessary
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { MdModeEditOutline, MdDelete } from "react-icons/md";
+import { MdModeEditOutline, MdDelete, MdPostAdd } from "react-icons/md";
+import { GrSave } from "react-icons/gr";
 
-const Modal = ({ isOpen, onClose, onSave, title, content, setTitle, setContent }) => {
-    if (!isOpen) return null;
 
-    const handleSave = () => {
-        onSave();
-        onClose();
-    };
-
-    return (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-8 max-w-md w-full">
-                <h2 className="text-2xl font-bold mb-4">Edit Note</h2>
-                <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    className="w-full px-3 py-2 placeholder-gray-400 rounded-lg focus:outline-none bg-gray-100 text-gray-800 transition duration-300 transform focus:ring-2"
-                    placeholder="Title..."
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <textarea
-                    id="content"
-                    name="content"
-                    rows="5"
-                    className="w-full mt-2 px-3 py-2 placeholder-gray-400 rounded-lg focus:outline-none bg-gray-100 text-gray-800 transition duration-300 transform focus:ring-2"
-                    placeholder="Content..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    style={{ resize: "none" }}
-                ></textarea>
-                <div className="flex justify-end mt-4">
-                    <button
-                        className="px-4 py-2 bg-yellow-700 text-white rounded-md hover:bg-yellow-800 transition duration-300 ease-in-out"
-                        onClick={handleSave}
-                    >
-                        Save
-                    </button>
-                    <button
-                        className="ml-2 px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition duration-300 ease-in-out"
-                        onClick={onClose}
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 const NoteAdder = () => {
     const [title, setTitle] = useState('');
@@ -157,7 +110,7 @@ const NoteAdder = () => {
             setEditingNote(null);
             toast.success('Note edited successfully!');
 
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             toast.error('Failed to edit note');
             console.error('Error editing note:', error);
@@ -188,7 +141,6 @@ const NoteAdder = () => {
         setTitle(note.title);
         setContent(note.content);
         setEditingNote(note.note_id);
-        setModalOpen(true);
     };
 
     if (!user) {
@@ -228,11 +180,7 @@ const NoteAdder = () => {
                         className="flex items-center justify-center px-4 py-2 mt-4 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
                         onClick={editingNote ? handleEditNote : handleAddNote}
                     >
-                        <svg className="w-6 h-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d={editingNote ? "M16.862 3.138a1.5 1.5 0 00-2.121 0L7.5 10.379l-.379.38L5 13l.379-.379 7.24-7.241a1.5 1.5 0 000-2.121z" : "M14.328 10.172a.25.25 0 010 .354l-3.823 3.823a.25.25 0 01-.354 0l-3.823-3.823a.25.25 0 01.354-.354L10 12.293l3.328-3.328a.25.25 0 01.354 0z"} clipRule="evenodd" />
-                            <path fillRule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zM1.25 10a8.75 8.75 0 1117.5 0 8.75 8.75 0 01-17.5 0z" clipRule="evenodd" />
-                        </svg>
-                        {editingNote ? 'Save Note' : 'Add Note'}
+                        {editingNote ? <GrSave /> : <MdPostAdd />}
                     </button>
                 </div>
             </div>
@@ -269,21 +217,6 @@ const NoteAdder = () => {
                 ))}
             </div>
             <ToastContainer />
-
-            <Modal
-                isOpen={modalOpen}
-                onClose={() => {
-                    setModalOpen(false);
-                    setTitle('');
-                    setContent('');
-                    setEditingNote(null);
-                }}
-                onSave={editingNote ? handleEditNote : handleAddNote}
-                title={title}
-                content={content}
-                setTitle={setTitle}
-                setContent={setContent}
-            />
         </div>
     );
 };
