@@ -6,27 +6,12 @@ import Navbar from '../../../components/navbar';
 import { onAuthStateChangedListener } from '/app/firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { MdModeEditOutline, MdDelete, MdPostAdd } from "react-icons/md";
+import { MdModeEditOutline, MdDelete, MdPostAdd, MdFormatBold, MdFormatItalic } from "react-icons/md";
 import { GrSave } from "react-icons/gr";
 import ColorizeIcon from '@mui/icons-material/Colorize';
 import TextField from '@mui/material/TextField';
 
-const colors = [
-  '#FFADAD', // Light Red
-  '#FFD6A5', // Light Orange
-  '#FDFFB6', // Light Yellow
-  '#CAFFBF', // Light Green
-  '#9BF6FF', // Light Cyan
-  '#A0C4FF', // Light Blue
-  '#BDB2FF', // Light Purple
-  '#FFC6FF', // Light Pink
-  '#FFFFFC', // Light Grey
-  '#D3D3D3', // Grey
-  '#ECECEC', // Light Grey
-  '#FFA07A', // Light Salmon
-  '#AFEEEE', // Pale Turquoise
-  '#D8BFD8'  // Thistle
-];
+const colors = ['#FFFFFF', '#F28B82', '#FBBC04', '#FFF475', '#CCFF90', '#A7FFEB', '#CBF0F8', '#AECBFA', '#D7AEFB', '#FDCFE8', '#E6C9A8', '#E8EAED'];
 
 const NoteAdder = () => {
     const [title, setTitle] = useState('');
@@ -75,7 +60,7 @@ const NoteAdder = () => {
             return;
         }
 
-        const noteColor = color || 'transparent'; // Use selected color or default to transparent
+        const noteColor = color || colors[0]; // Default color if no color is selected
 
         try {
             const response = await fetch('https://produpbackend.vercel.app/addnote', {
@@ -111,7 +96,7 @@ const NoteAdder = () => {
             return;
         }
 
-        const noteColor = color || 'transparent'; // Use selected color or default to transparent
+        const noteColor = color || colors[0]; // Default color if no color is selected
 
         try {
             const response = await fetch(`https://produpbackend.vercel.app/editnote/${editingNote}`, {
@@ -162,7 +147,7 @@ const NoteAdder = () => {
     const startEditing = (note) => {
         setTitle(note.title);
         setContent(note.content);
-        setColor(note.color || null); // Set color to the note's color or null if not defined
+        setColor(note.color || colors[0]); // Set color to the note's color
         setEditingNote(note.note_id);
     };
 
@@ -175,6 +160,37 @@ const NoteAdder = () => {
         setShowColorPalette(false); // Hide the color palette after selecting a color
     };
 
+    const applyFormatting = (format) => {
+        let textarea = document.getElementById('content');
+        let start = textarea.selectionStart;
+        let end = textarea.selectionEnd;
+        let selectedText = content.substring(start, end);
+        let beforeText = content.substring(0, start);
+        let afterText = content.substring(end);
+
+        let formattedText;
+        if (format === 'bold') {
+            formattedText = `**${selectedText}**`;
+        } else if (format === 'italic') {
+            formattedText = `*${selectedText}*`;
+        }
+
+        setContent(beforeText + formattedText + afterText);
+    };
+
+    const renderContent = (text) => {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.split(urlRegex).map((part, index) =>
+            urlRegex.test(part) ? (
+                <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                    {part}
+                </a>
+            ) : (
+                part
+            )
+        );
+    };
+
     if (!user) {
         return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading...</div>;
     }
@@ -182,58 +198,47 @@ const NoteAdder = () => {
     return (
         <div className="bg-gray-900 text-white min-h-screen font-mono">
             <Navbar />
-            <h1 className='mx-auto justify-center items-center flex text-4xl font-bold text-yellow-700 mt-10 animate-bounce'>Notes!</h1>
             <div className="container mx-auto py-8 w-2/3 lg:w-1/2">
                 <div className="bg-gray-800 rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-600 border mx-auto hover:border-yellow-700 transition duration-300 transform hover:scale-105 hover:shadow-2xl">
-                <div className="mb-4">
-                <TextField
-                id="title"
-                label="Title"
-                variant="standard"
-                fullWidth
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                InputProps={{
-                style: { color: 'white' },
-                classes: {
-                  root: 'text-white',
-                  underline: 'after:border-white',
-                  },
-                 }}
-                InputLabelProps={{
-                 style: { color: 'white' },
-                 classes: {
-                 root: 'text-white',
-                },
-                }}
-                />
-              </div>
-              <div className="mb-4">
-              <TextField
-              id="content"
-              label="Content"
-              variant="standard"
-              fullWidth
-              multiline
-              rows={5}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              InputProps={{
-              style: { color: 'white' },
-              classes: {
-              root: 'text-white',
-              underline: 'after:border-white',
-            },
-            }}
-             InputLabelProps={{
-             style: { color: 'white' },
-             classes: {
-             root: 'text-white',
-            },
-             }}
-            />
-            </div>
-                    <div className="mb-4 flex gap-2">
+                    <div className="mb-4">
+                        <TextField
+                            id="title"
+                            label="Title"
+                            variant="standard"
+                            fullWidth
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            InputProps={{
+                                className: "text-white",
+                                style: { color: 'white' },
+                            }}
+                            InputLabelProps={{
+                                className: "text-white",
+                                style: { color: 'white' },
+                            }}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <TextField
+                            id="content"
+                            label="Content"
+                            variant="standard"
+                            fullWidth
+                            multiline
+                            rows={5}
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            InputProps={{
+                                className: "text-white",
+                                style: { color: 'white' },
+                            }}
+                            InputLabelProps={{
+                                className: "text-white",
+                                style: { color: 'white' },
+                            }}
+                        />
+                    </div>
+                    <div className="mb-4 flex gap-2 justify-left">
                         <button
                             className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
                             onClick={editingNote ? handleEditNote : handleAddNote}
@@ -245,6 +250,18 @@ const NoteAdder = () => {
                             onClick={toggleColorPalette}
                         >
                             <ColorizeIcon fontSize="small" />
+                        </button>
+                        <button
+                            className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
+                            onClick={() => applyFormatting('bold')}
+                        >
+                            <MdFormatBold size={20} />
+                        </button>
+                        <button
+                            className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
+                            onClick={() => applyFormatting('italic')}
+                        >
+                            <MdFormatItalic size={20} />
                         </button>
                     </div>
                     {showColorPalette && (
@@ -270,7 +287,7 @@ const NoteAdder = () => {
                         style={{ backgroundColor: note.color || 'transparent' }} // Apply the note color
                     >
                         <h3 className="font-mono font-extrabold text-white">{note.title}</h3>
-                        <p className="text-gray-300">{note.content}</p>
+                        <p className="text-gray-300">{renderContent(note.content)}</p>
                         <br />
 
                         <div className='relative bottom-0 left-0 flex flex-row gap-5'>
