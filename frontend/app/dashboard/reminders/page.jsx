@@ -88,47 +88,49 @@ const Reminders = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center py-2">
+      <div
+        className="min-h-screen bg-cover bg-center flex flex-col items-center justify-center py-2 bg-gray-900"
+      >
         <ToastContainer />
-        <h1 className="mx-auto justify-center items-center flex text-4xl font-bold text-yellow-700 mt-10">Set a Reminder</h1>
-        <div className="mt-6 bg-gray-800 rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-600 border mx-auto hover:border-yellow-700 transition duration-300 transform hover:-translate-y-1 hover:shadow-2xl">
+        <h1 className="text-3xl text-white font-bold mb-6">Set a Reminder</h1>
+        <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
           <div className="mb-4">
-            <label htmlFor="day" className="block text-sm font-medium text-white font-bold">Day</label>
+            <label htmlFor="day" className="block text-sm font-medium text-gray-700">Day</label>
             <input
               id="day"
               type="date"
               value={day}
               onChange={(e) => setDay(e.target.value)}
-              className="w-full px-3 py-2 placeholder-gray-400 rounded-lg focus:outline-none bg-gray-700 text-white transition duration-300 transform focus:ring-2 focus:ring-yellow-700" />
+              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
           </div>
           <div className="mb-4">
-            <label htmlFor="time" className="block text-sm font-medium text-white font-bold">Time</label>
+            <label htmlFor="time" className="block text-sm font-medium text-gray-700">Time</label>
             <input
               id="time"
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full px-3 py-2 placeholder-gray-400 rounded-lg focus:outline-none bg-gray-700 text-white transition duration-300 transform focus:ring-2 focus:ring-yellow-700" />
+              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
           </div>
           <div className="mb-6">
-            <label htmlFor="message" className="block text-sm font-medium text-white font-bold">Message</label>
+            <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
             <input
               id="message"
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full px-3 py-2 placeholder-gray-400 rounded-lg focus:outline-none bg-gray-700 text-white transition duration-300 transform focus:ring-2 focus:ring-yellow-700" />
+              className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
           </div>
           <div className="flex justify-end">
             <button
               onClick={handleAddReminder}
-              className="flex items-center justify-center px-4 py-2 mt-4 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Add Reminder
             </button>
           </div>
         </div>
-        <div className="mt-6">
+        <div className="mt-8 animate__animated animate__fadeInUp">
           <SoundComponent />
         </div>
       </div>
