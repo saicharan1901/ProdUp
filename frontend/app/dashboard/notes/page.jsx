@@ -254,6 +254,18 @@ const NoteAdder = () => {
                         >
                             <ColorizeIcon fontSize="small" />
                         </button>
+                        {showColorPalette && (
+                        <div className="flex flex-wrap gap-2 mt-4 justify-end">
+                            {colors.map((c) => (
+                                <button
+                                    key={c}
+                                    className={`w-8 h-8 rounded-full ${c === color ? 'ring-3 ring-green-500' : ''}`}
+                                    style={{ backgroundColor: c }}
+                                    onClick={() => handleColorSelect(c)}
+                                />
+                            ))}
+                        </div>
+                    )}
                         {/* <button
                             className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
                             onClick={() => applyFormatting('bold')}
@@ -267,18 +279,7 @@ const NoteAdder = () => {
                             <MdFormatItalic size={20} />
                         </button> */}
                     </div>
-                    {showColorPalette && (
-                        <div className="flex flex-wrap gap-2 mt-4 justify-end">
-                            {colors.map((c) => (
-                                <button
-                                    key={c}
-                                    className={`w-8 h-8 rounded-full ${c === color ? 'ring-2 ring-yellow-700' : ''}`}
-                                    style={{ backgroundColor: c }}
-                                    onClick={() => handleColorSelect(c)}
-                                />
-                            ))}
-                        </div>
-                    )}
+
                 </div>
             </div>
 
