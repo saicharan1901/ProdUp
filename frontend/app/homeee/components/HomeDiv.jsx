@@ -38,9 +38,10 @@ const HomeDiv = () => {
       <div className="text-center">
         {user ? (
           <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-          <h1 className="text-6xl font-extrabold text-gray-200 mb-4">
-            Welcome, {user.displayName}
-          </h1>
+          <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-sky-300 mb-4 shadow-lg p-4 rounded-lg">
+            Welcome <span role="img" aria-label="wave">👋</span> {user.displayName}!
+            </h1>
+            
           <img src={user.photoURL} alt="Profile" className="w-24 h-24 rounded-full mb-4" />
           <button
             onClick={() => router.push('/dashboard')}

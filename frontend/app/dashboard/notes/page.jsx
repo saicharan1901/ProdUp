@@ -6,12 +6,13 @@ import Navbar from '../../../components/navbar';
 import { onAuthStateChangedListener } from '/app/firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { MdModeEditOutline, MdDelete, MdPostAdd, MdFormatBold, MdFormatItalic } from "react-icons/md";
+import { MdModeEditOutline, MdDelete, MdPostAdd, MdFormatBold, MdFormatItalic, MdMic } from "react-icons/md"; // Import MdMic icon
 import { GrSave } from "react-icons/gr";
 import ColorizeIcon from '@mui/icons-material/Colorize';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const colors = ['#FFFFFF', '#F28B82', '#FBBC04', '#FFF475', '#CCFF90', '#A7FFEB', '#CBF0F8', '#AECBFA', '#D7AEFB', '#FDCFE8', '#E6C9A8', '#E8EAED'];
+const colors = ['#000000', '#A52A2A', '#FF8C00', '#B8860B', '#556B2F', '#2E8B57', '#4682B4', '#1E90FF', '#8A2BE2', '#DA70D6', '#8B4513', '#708090'];
 
 const NoteAdder = () => {
     const [title, setTitle] = useState('');
@@ -68,7 +69,7 @@ const NoteAdder = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ user_id: user.uid, title, content, color: noteColor }),
+                body: JSON.stringify({ user_id: user.uid, title, content, bgcolor: noteColor }),
             });
 
             if (!response.ok) {
@@ -76,7 +77,7 @@ const NoteAdder = () => {
                 throw new Error(errorResponse.message || 'Failed to add note');
             }
 
-            const newNote = { title, content, color: noteColor };
+            const newNote = { title, content };
             setNotes([...notes, newNote]);
             setTitle('');
             setContent('');
@@ -104,7 +105,7 @@ const NoteAdder = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ title, content, color: noteColor }),
+                body: JSON.stringify({ title, content, bgcolor: noteColor }),
             });
 
             if (!response.ok) {
@@ -112,12 +113,13 @@ const NoteAdder = () => {
                 throw new Error(errorResponse.message || 'Failed to edit note');
             }
 
-            setNotes(notes.map(note => note.note_id === editingNote ? { ...note, title, content, color: noteColor } : note));
+            setNotes(notes.map(note => note.note_id === editingNote ? { ...note, title, content, bgcolor: noteColor} : note));
             setTitle('');
             setContent('');
             setColor(null); // Reset color
             setEditingNote(null);
             toast.success('Note edited successfully!');
+            window.location.reload();
         } catch (error) {
             toast.error('Failed to edit note');
             console.error('Error editing note:', error);
@@ -191,8 +193,35 @@ const NoteAdder = () => {
         );
     };
 
+    const handleSpeechRecognition = () => {
+        if (!('webkitSpeechRecognition' in window)) {
+            toast.error('Speech recognition not supported in this browser.');
+            return;
+        }
+
+        const recognition = new window.webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.start();
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            setContent(content + ' ' + transcript);
+        };
+
+        recognition.onerror = (event) => {
+            toast.error('Speech recognition error: ' + event.error);
+        };
+
+        recognition.onend = () => {
+            toast.info('Speech recognition ended.');
+        };
+    };
+
     if (!user) {
-        return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Loading...</div>;
+        return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center"><CircularProgress /></div>;
     }
 
     return (
@@ -238,80 +267,59 @@ const NoteAdder = () => {
                             }}
                         />
                     </div>
-                    <div className="mb-4 flex gap-2 justify-left">
+                    <div className="mb-4 flex justify-center">
                         <button
-                            className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
+                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             onClick={editingNote ? handleEditNote : handleAddNote}
                         >
-                            {editingNote ? <GrSave size={20} /> : <MdPostAdd size={20} />}
+                            {editingNote ? 'Save' : 'Add Note'}
                         </button>
-                        <button
-                            className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
-                            onClick={toggleColorPalette}
-                        >
-                            <ColorizeIcon fontSize="small" />
+                    </div>
+                    <div className="flex justify-center mb-4">
+                        <button onClick={handleSpeechRecognition} className="text-3xl text-yellow-500 hover:text-yellow-600 focus:outline-none">
+                            <MdMic />
                         </button>
-                        <button
-                            className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
-                            onClick={() => applyFormatting('bold')}
-                        >
-                            <MdFormatBold size={20} />
-                        </button>
-                        <button
-                            className="flex items-center justify-center px-4 py-2 text-white bg-yellow-700 rounded-full hover:bg-yellow-800 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-opacity-50"
-                            onClick={() => applyFormatting('italic')}
-                        >
-                            <MdFormatItalic size={20} />
+                    </div>
+                    <div className="flex justify-center mb-4">
+                        <button onClick={toggleColorPalette} className="text-3xl text-yellow-500 hover:text-yellow-600 focus:outline-none">
+                            <ColorizeIcon />
                         </button>
                     </div>
                     {showColorPalette && (
-                        <div className="flex flex-wrap gap-2 mt-4 justify-end">
-                            {colors.map((c) => (
-                                <button
-                                    key={c}
-                                    className={`w-8 h-8 rounded-full ${c === color ? 'ring-2 ring-yellow-700' : ''}`}
-                                    style={{ backgroundColor: c }}
-                                    onClick={() => handleColorSelect(c)}
-                                />
+                        <div className="color-palette mb-4">
+                            {colors.map((color, index) => (
+                                <div
+                                    key={index}
+                                    className="color-swatch inline-block w-6 h-6 mx-1 border border-gray-600 rounded cursor-pointer"
+                                    style={{ backgroundColor: color }}
+                                    onClick={() => handleColorSelect(color)}
+                                ></div>
                             ))}
                         </div>
                     )}
                 </div>
-            </div>
-
-            <div className="columns-1 sm:columns-1 md:columns-2 lg:columns-3 lg:max-w-7xl max-w-xl gap-6 mx-auto">
-                {notes.map((note) => (
-                    <div
-                        key={note.note_id}
-                        className="bg-gray-900 rounded-lg shadow-lg p-6 mb-6 break-inside-avoid break-words hover:border-yellow-700 border transition-all duration-300 ease-in-out transform hover:scale-105 relative"
-                        style={{ backgroundColor: note.color || 'transparent' }} // Apply the note color
-                    >
-                        <h3 className="font-mono font-extrabold text-white">{note.title}</h3>
-                        <p className="text-gray-300">{renderContent(note.content)}</p>
-                        <br />
-
-                        <div className='relative bottom-0 left-0 flex flex-row gap-5'>
-                            <div>
-                                <button
-                                    className="p-1 text-white hover:text-yellow-600 transition-all duration-300 ease-in-out opacity-100 group-hover:opacity-100"
-                                    onClick={() => startEditing(note)}
-                                >
-                                    <MdModeEditOutline />
-                                </button>
+                {notes.length > 0 && (
+                    <div className="bg-gray-800 rounded-lg shadow-lg px-8 py-6 border-gray-600 border mx-auto hover:border-yellow-700 transition duration-300 transform hover:scale-105 hover:shadow-2xl">
+                        {notes.map((note) => (
+                            <div key={note.note_id} className="mb-4 p-4 rounded-lg" style={{ backgroundColor: note.bgcolor || colors[0] }}>
+                                <div className="flex justify-between items-center mb-2">
+                                    <h2 className="text-xl font-bold text-white">{note.title}</h2>
+                                    <div>
+                                        <button onClick={() => startEditing(note)} className="text-2xl text-white hover:text-yellow-600 focus:outline-none">
+                                            <MdModeEditOutline />
+                                        </button>
+                                        <button onClick={() => handleDelete(note.note_id)} className="text-2xl text-white hover:text-red-600 focus:outline-none ml-2">
+                                            <MdDelete />
+                                        </button>
+                                    </div>
+                                </div>
+                                <p className="text-white">{renderContent(note.content)}</p>
                             </div>
-                            <div>
-                                <button
-                                    className="p-1 text-white hover:text-red-600 transition-all duration-300 ease-in-out opacity-100 group-hover:opacity-100"
-                                    onClick={() => handleDelete(note.note_id)}
-                                >
-                                    <MdDelete />
-                                </button>
-                            </div>
-                        </div>
+                        ))}
                     </div>
-                ))}
+                )}
+                <ToastContainer />
             </div>
-            <ToastContainer />
         </div>
     );
 };

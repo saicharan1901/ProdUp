@@ -9,14 +9,15 @@ import { onAuthStateChangedListener } from '/app/firebase'; // Adjust path as ne
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
-import AddIcon from '@mui/icons-material/Add';
 import ListIcon from '@mui/icons-material/List';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import TextField from '@mui/material/TextField';
 import { motion } from 'framer-motion'; // For animations
+import AddIcon from '@mui/icons-material/Add';
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
+  const [recentlyDeletedTodos, setRecentlyDeletedTodos] = useState([]);
   const [todoText, setTodoText] = useState('');
   const [tagText, setTagText] = useState('');
   const [view, setView] = useState('all');
@@ -62,10 +63,13 @@ const Todo = () => {
   };
 
   const handleDeleteTodo = (id) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
-    setTodos(updatedTodos);
-
-    toast.error('Todo deleted!', { position: "top-right" });
+    const todoToDelete = todos.find(todo => todo.id === id);
+    if (todoToDelete) {
+      setRecentlyDeletedTodos([...recentlyDeletedTodos, todoToDelete]);
+      const updatedTodos = todos.filter(todo => todo.id !== id);
+      setTodos(updatedTodos);
+      toast.error('Todo deleted!', { position: "top-right" });
+    }
   };
 
   const handleToggleImportant = (id) => {
@@ -82,12 +86,14 @@ const Todo = () => {
     return true;
   });
 
+  const filteredRecentlyDeletedTodos = recentlyDeletedTodos.filter(todo => view === 'deleted');
+
   return (
     <>
       <Navbar />
       <div className="min-h-screen bg-gray-900 flex">
         <ToastContainer />
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -117,6 +123,14 @@ const Todo = () => {
           >
             <CheckCircleRoundedIcon className="mr-2" /> Completed
           </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setView('deleted')}
+            className="w-full py-2 text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-yellow-600 mb-2 flex items-center justify-center"
+          >
+            <DeleteRoundedIcon className="mr-2" /> Recently Deleted
+          </motion.button>
         </motion.div>
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -125,106 +139,13 @@ const Todo = () => {
           className="w-4/5 bg-gray-900 flex flex-col items-center py-4"
         >
           <h1 className="text-4xl font-bold text-white mb-8">Todo List</h1>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mt-6 bg-transparent rounded-lg shadow-lg px-8 py-6 mb-8 border-gray-600 border mx-auto hover:border-yellow-700 transition duration-300 transform hover:-translate-y-1 hover:shadow-2xl"
-          >
-            <div className="mb-4">
-              <TextField
-                id="todo"
-                label="Add your task"
-                variant="outlined"
-                value={todoText}
-                onChange={(e) => setTodoText(e.target.value)}
-                fullWidth
-                InputProps={{
-                  className: "text-white",
-                  style: { backgroundColor: 'transparent', borderColor: 'white' },
-                }}
-                InputLabelProps={{
-                  className: "text-white",
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'white',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'white',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'white',
-                    },
-                  },
-                  '& .MuiInputBase-input': {
-                    color: 'white',
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: 'white',
-                  },
-                }}
-              />
-            </div>
-            <div className="mb-4">
-              <TextField
-                id="tags"
-                label="Add tags"
-                variant="outlined"
-                value={tagText}
-                onChange={(e) => setTagText(e.target.value)}
-                fullWidth
-                InputProps={{
-                  className: "text-white",
-                  style: { backgroundColor: 'transparent', borderColor: 'white' },
-                }}
-                InputLabelProps={{
-                  className: "text-white",
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'white',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'white',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'white',
-                    },
-                  },
-                  '& .MuiInputBase-input': {
-                    color: 'white',
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: 'white',
-                  },
-                }}
-              />
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleAddTodo}
-              className="w-full py-2 text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <AddIcon className="mr-2" /> Add Todo
-            </motion.button>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className=""
-          >
-            {filteredTodos.map(todo => (
+          {(view !== 'deleted' ? filteredTodos : filteredRecentlyDeletedTodos).map(todo => (
               <motion.div
                 key={todo.id}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="flex items-center justify-between bg-gray-200 px-4 py-2 mb-2 rounded-md shadow-sm"
+                className="flex items-center justify-between bg-gray-200 px-4 py-2 mb-2 rounded-md shadow-sm w-full"
               >
                 <div className="flex items-center">
                   <input
@@ -234,30 +155,67 @@ const Todo = () => {
                     className="form-checkbox h-5 w-5 text-blue-500 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   />
                   <p className={`ml-2 text-lg ${todo.done ? 'line-through' : ''}`}>{todo.text}</p>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleToggleImportant(todo.id)}
-                    className="text-yellow-500 hover:text-yellow-700 focus:outline-none ml-2"
-                  >
-                    {todo.important ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
-                  </motion.button>
+                  {view !== 'deleted' && (
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => handleToggleImportant(todo.id)}
+                      className="text-yellow-500 hover:text-yellow-700 focus:outline-none ml-2"
+                    >
+                      {todo.important ? <StarRoundedIcon /> : <StarBorderRoundedIcon />}
+                    </motion.button>
+                  )}
                 </div>
                 <div className="flex items-center">
                   {todo.tags.map((tag, index) => (
                     <span key={index} className="px-2 py-1 text-xs bg-blue-200 text-blue-800 rounded-full mr-1">{tag}</span>
                   ))}
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleDeleteTodo(todo.id)}
-                    className="text-red-500 hover:text-red-700 focus:outline-none ml-2"
-                  >
-                    <DeleteRoundedIcon />
-                  </motion.button>
+                  {view !== 'deleted' && (
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => handleDeleteTodo(todo.id)}
+                      className="text-red-500 hover:text-red-700 focus:outline-none ml-2"
+                    >
+                      <DeleteRoundedIcon />
+                    </motion.button>
+                  )}
                 </div>
               </motion.div>
             ))}
+            
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          className='w-full bottom-0 inset-x-0 absolute'
+          >
+            {/* Display added tasks input below title */}
+            <div className="flex items-center">
+              <TextField
+                id="fullWidth"
+                label="Add your task"
+                variant="standard"
+                value={todoText}
+                onChange={(e) => setTodoText(e.target.value)}
+                fullWidth
+                InputProps={{
+                  className: "text-white",
+                  style: { borderBottom: '1px solid white', color: 'white', width: '100%' },
+                }}
+                InputLabelProps={{
+                  className: "text-white",
+                }}
+              />
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleAddTodo}
+                className="ml-4 py-2 px-4 text-sm font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <AddIcon className="mr-2" /> Add
+              </motion.button>
+            </div>
           </motion.div>
         </motion.div>
       </div>
